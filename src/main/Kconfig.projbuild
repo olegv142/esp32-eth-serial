@@ -1,0 +1,10 @@
+menu "Eth-UART Bridge Configuration"
+
+config CLK_EN_GPIO
+    int "CLK enable GPIO number"
+	range 16 16
+	default 16
+	help
+		GPIO number (IOxx) for 50MHz oscillator enable.
+
+endmenu

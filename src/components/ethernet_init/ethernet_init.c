@@ -243,6 +243,11 @@ esp_err_t example_eth_init(esp_eth_handle_t *eth_handles_out[], uint8_t *eth_cnt
     esp_eth_handle_t *eth_handles = NULL;
     uint8_t eth_cnt = 0;
 
+#ifdef CONFIG_CLK_EN_GPIO
+    gpio_set_direction(CONFIG_CLK_EN_GPIO, GPIO_MODE_OUTPUT);
+    gpio_set_level(CONFIG_CLK_EN_GPIO, 1);
+#endif
+
 #if CONFIG_EXAMPLE_USE_INTERNAL_ETHERNET || CONFIG_EXAMPLE_USE_SPI_ETHERNET
     ESP_GOTO_ON_FALSE(eth_handles_out != NULL && eth_cnt_out != NULL, ESP_ERR_INVALID_ARG,
                         err, TAG, "invalid arguments: initialized handles array or number of interfaces");
