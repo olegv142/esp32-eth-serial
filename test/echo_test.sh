@@ -26,6 +26,7 @@ for (( ; ; )); do
         continue
     fi
 
-    echo \n!!! send and receive data don\'t match !!!
+    echo
+    echo !!! send and receive data don\'t match !!!
     exit 1
 done
