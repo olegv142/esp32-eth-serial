@@ -16,6 +16,7 @@
 #include "esp_log.h"
 #include "ethernet_init.h"
 #include "sdkconfig.h"
+#include "tcp_server.h"
 
 static const char *TAG = "eth_example";
 
@@ -116,4 +117,6 @@ void app_main(void)
     for (int i = 0; i < eth_port_cnt; i++) {
         ESP_ERROR_CHECK(esp_eth_start(eth_handles[i]));
     }
+
+    tcp_server_create();
 }
