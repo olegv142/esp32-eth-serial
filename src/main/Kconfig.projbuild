@@ -1,5 +1,9 @@
 menu "Eth-UART Bridge Configuration"
 
+config HAS_CLK_EN_PIN
+    bool "Has clock enable pin"
+    default y
+
 config CLK_EN_GPIO
     int "CLK enable GPIO number"
 	range 16 16

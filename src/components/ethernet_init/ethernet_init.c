@@ -243,7 +243,7 @@ esp_err_t example_eth_init(esp_eth_handle_t *eth_handles_out[], uint8_t *eth_cnt
     esp_eth_handle_t *eth_handles = NULL;
     uint8_t eth_cnt = 0;
 
-#ifdef CONFIG_CLK_EN_GPIO
+#ifdef CONFIG_HAS_CLK_EN_PIN
     gpio_set_direction(CONFIG_CLK_EN_GPIO, GPIO_MODE_OUTPUT);
     gpio_set_level(CONFIG_CLK_EN_GPIO, 1);
 #endif

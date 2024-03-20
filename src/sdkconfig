@@ -373,6 +373,7 @@ CONFIG_PARTITION_TABLE_MD5=y
 #
 # Eth-UART Bridge Configuration
 #
+CONFIG_HAS_CLK_EN_PIN=y
 CONFIG_CLK_EN_GPIO=16
 # end of Eth-UART Bridge Configuration
 
