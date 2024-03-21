@@ -42,7 +42,7 @@ The bridge does not have static network configuration. Its expecting to get netw
 
 ## Testing
 
-The *esp32-eth-serial/test* folder has scripts for testing both server sockets in echo mode. The *echo_perf.sh* script send continuous stream of random data to echo socket and receives data back. The *echo_test.sh* sends chunks of random data to echo socket receives them back and verify that data received is the same as data sent. The maximum throughput of the echo socket according to those tests is around 1.3 MBytes/sec.
+The *esp32-eth-serial/test* folder has scripts for testing both server sockets in echo mode. The *echo_perf.sh* script sends continuous stream of random data to echo socket and receives data back. The *echo_test.sh* sends chunks of random data to echo socket receives them back and verify that data received is the same as data sent. The maximum throughput of the echo socket according to those tests is around 1.3 MBytes/sec.
 
 The *uart_echo_perf.sh* script send continuous stream of random data to bridge socket and receives data back. The run UART echo tests one should enable CTS flow control and connect RX to TX and RTS to CTS pins. Similarly the *uart_echo_test.sh* script sends chunks of random data to bridge socket receives them back and verify that data received is the same as data sent.
 
