@@ -390,7 +390,7 @@ CONFIG_UART_RX_BUFF_SIZE=17
 # end of Eth-UART Bridge Configuration
 
 #
-# Example Ethernet Configuration
+# Ethernet Configuration
 #
 CONFIG_ENV_GPIO_RANGE_MIN=0
 CONFIG_ENV_GPIO_RANGE_MAX=39
@@ -407,7 +407,7 @@ CONFIG_EXAMPLE_ETH_MDIO_GPIO=18
 CONFIG_EXAMPLE_ETH_PHY_RST_GPIO=5
 CONFIG_EXAMPLE_ETH_PHY_ADDR=1
 # CONFIG_EXAMPLE_USE_SPI_ETHERNET is not set
-# end of Example Ethernet Configuration
+# end of Ethernet Configuration
 
 #
 # Compiler options
