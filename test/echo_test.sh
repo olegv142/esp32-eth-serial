@@ -18,7 +18,8 @@ for (( ; ; )); do
     sum $fifo > $cktx &
     sum_pid=$!
 
-    dd if=/dev/urandom bs=1M count=10 2>/dev/null | tee $fifo | nc -N $1 3333 | sum > $ckrx
+    size=$((1 + ($RANDOM % 4096) + 4096 * ($RANDOM % 4096)))
+    dd if=/dev/urandom bs=1 count=$size 2>/dev/null | tee $fifo | nc -N $1 3333 | sum > $ckrx
     wait $sum_pid
 
     if diff $cktx $ckrx; then
