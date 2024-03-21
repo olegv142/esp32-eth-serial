@@ -5,7 +5,7 @@ if [ -z "$1" ]; then
     exit 1
 fi
 
-fifo=/tmp/esp32-eth-echo
+fifo=/tmp/esp32-eth-uart-echo
 cktx=uart_echo_test_tx.txt
 ckrx=uart_echo_test_rx.txt
 
