@@ -11,17 +11,14 @@ menu "Eth-UART Bridge Configuration"
         help
             GPIO number (IOxx) for 50MHz oscillator enable.
 
-    config EXAMPLE_IPV4
-        bool "IPV4"
-        default y
-        depends on LWIP_IPV4
+    config BRIDGE_PORT
+        int "Echo port"
+        range 0 65535
+        default 3142
+        help
+            Local port the UART bridge will listen on.
 
-    config EXAMPLE_IPV6
-        bool "IPV6"
-        default n
-        select EXAMPLE_CONNECT_IPV6
-
-    config EXAMPLE_PORT
+    config ECHO_PORT
         int "Echo port"
         range 0 65535
         default 3333
@@ -45,5 +42,61 @@ menu "Eth-UART Bridge Configuration"
         default 3
         help
             Keep-alive probe packet retry count.
+
+    config UART_TX_GPIO
+        int "UART TX GPIO number"
+        range 0 34
+        default 2
+        help
+            GPIO number (IOxx) for serial data TX output.
+
+    config UART_RX_GPIO
+        int "UART RX GPIO number"
+        range 0 34
+        default 4
+        help
+            GPIO number (IOxx) for serial data RX input.
+
+    config UART_RTS_GPIO
+        int "UART RTS GPIO number"
+        range 0 34
+        default 12
+        help
+            GPIO number (IOxx) for serial data RTS output. Low level enables data reception from RX line.
+
+    config UART_CTS_GPIO
+        depends on UART_CTS_EN
+        int "UART CTS GPIO number"
+        range 0 34
+        default 14
+        help
+            GPIO number (IOxx) for serial data CTS input. Low level enables data transmission to TX line.
+
+    config UART_CTS_EN
+        bool "UART CTS enable"
+        default n
+        help
+            Enable using CTS input. Low level on this pin enables data transmission to TX line.
+
+    config UART_BITRATE
+        int "UART baud rate"
+        range 9600 1843200
+        default 921600
+        help
+            UART data transfer rate in bits per second.
+
+    config UART_TX_BUFF_SIZE
+        int "UART transmit buffer size (KB)"
+        range 0 64
+        default 17
+        help
+            UART transmit data buffer size in kilobytes.
+
+    config UART_RX_BUFF_SIZE
+        int "UART receive buffer size (KB)"
+        range 1 64
+        default 17
+        help
+            UART receive data buffer size in kilobytes.
 
 endmenu

@@ -18,7 +18,7 @@
 #include "sdkconfig.h"
 #include "tcp_server.h"
 
-static const char *TAG = "eth_example";
+static const char *TAG = "bridge";
 
 /** Event handler for Ethernet events */
 static void eth_event_handler(void *arg, esp_event_base_t event_base,
