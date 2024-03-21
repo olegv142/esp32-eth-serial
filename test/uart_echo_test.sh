@@ -6,8 +6,8 @@ if [ -z "$1" ]; then
 fi
 
 fifo=/tmp/esp32-eth-echo
-cktx=echo_test_tx.txt
-ckrx=echo_test_rx.txt
+cktx=uart_echo_test_tx.txt
+ckrx=uart_echo_test_rx.txt
 
 rm -f $fifo
 mkfifo $fifo
