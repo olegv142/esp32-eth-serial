@@ -3,7 +3,7 @@ ESP32 ethernet to serial port bridge
 
 ## Motivation
 
-There are no readily available Ethernet to UART bridge having high bit rate with hardware flow control and low price. For example the EBYTE NT1 Ethernet bridge has maximum baud rate of 230400.
+There are no readily available Ethernet to UART bridge having high bit rate with hardware flow control and low price. For example the EBYTE NT1 Ethernet bridge has maximum baud rate of 230400 only.
 The ESP32 on the other hand provides an excellent platform for Ethernet to UART bridge implementation. We use WT32-ETH01 'wireless tag' module. Yet the code may be easily ported to any other
 module having Ethernet interface.
 
