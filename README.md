@@ -38,7 +38,7 @@ You can use hardware flow control CTS/RTS lines or ignore them depending on your
 
 ## Detailed description
 
-The bridge does not have static network configuration. Its expecting to get network configuration via DHCP from network its connected to. There are two server sockets the bridge is listening on. The first one is 'echo socket'. Its used for testing exclusively. It just sends all data received from network back to the sender. The second one is 'bridge socket'. It sends all data received from network to UART and sends all data received from UART to network (to the connection initiator). Once the connection is established to any of those sockets no other connection can be made to the same socket until the first one disconnects. Yet both sockets can serve connections simultaneously. The connection indicator output has high level while connection to bridge socket is established.
+The bridge does not have static network configuration. Its expecting to get network configuration via DHCP from network its connected to. There are two server sockets the bridge is listening on. The first one is 'echo socket'. Its used for testing exclusively. It just sends all data received from network back to the sender. The second one is 'bridge socket'. It sends all data received from network to UART and sends all data received from UART to network (to the other side of network connection). Once the connection is established to any of those sockets no other connection can be made to the same socket until the first one disconnects. Yet both sockets can serve connections simultaneously. The connection indicator output has high level while connection to bridge socket is established.
 
 ## Testing
 
