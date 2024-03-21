@@ -13,7 +13,7 @@ menu "Ethernet Configuration"
     if EXAMPLE_USE_INTERNAL_ETHERNET
         choice EXAMPLE_ETH_PHY_MODEL
             prompt "Ethernet PHY Device"
-            default EXAMPLE_ETH_PHY_IP101
+            default EXAMPLE_ETH_PHY_LAN87XX
             help
                 Select the Ethernet PHY device to use in the example.
 

@@ -46,14 +46,14 @@ menu "Eth-UART Bridge Configuration"
     config UART_TX_GPIO
         int "UART TX GPIO number"
         range 0 34
-        default 2
+        default 4
         help
             GPIO number (IOxx) for serial data TX output.
 
     config UART_RX_GPIO
         int "UART RX GPIO number"
-        range 0 34
-        default 4
+        range 0 35
+        default 35
         help
             GPIO number (IOxx) for serial data RX input.
 
