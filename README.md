@@ -59,5 +59,5 @@ The ESP32 module is using the same serial channel used for programming to print 
 The code was built with esp-idf version 5.2.1.
 
 ## Notes on porting and code modifications
-- The WT32-ETH01 used in this project has external clock generator with clock enable pin. Other platforms may not have such pin. One can run *idf.py menuconfig* to choose if clock enable pin is used.
+- The WT32-ETH01 used in this project has on-board clock generator with clock enable pin. Other platforms may not have such pin. One can run *idf.py menuconfig* to choose if clock enable pin is used.
 - More server sockets may be easily added to *main/tcp_server.c*. One can add yet another bridge socket with second UART if necessary.
