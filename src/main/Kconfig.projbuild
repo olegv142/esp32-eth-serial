@@ -12,7 +12,7 @@ menu "Eth-UART Bridge Configuration"
             GPIO number (IOxx) for 50MHz oscillator enable.
 
     config BRIDGE_PORT
-        int "Echo port"
+        int "Bridge port"
         range 0 65535
         default 3142
         help
