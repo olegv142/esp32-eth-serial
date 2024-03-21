@@ -26,7 +26,7 @@ The bridge has connection indicator output, serial data RX/TX lines and flow con
 
 ## Flashing
 
-Unless you have dev kit with USB programmer included you will need some minimal wiring made to the ESP32 module to be able to flash it. The following figure shows an example of such setup with programming connections shown in blue. The connections providing serial interface to the your system are shown in black.
+Unless you have dev kit with USB programmer included you will need some minimal wiring made to the ESP32 module to be able to flash it. The following figure shows an example of such setup with programming connections shown in blue. The connections providing serial interface to your system are shown in black.
 
 ![ESP32 module wiring](https://github.com/olegv142/esp32-eth-serial/blob/master/doc/wiring.png)
 
