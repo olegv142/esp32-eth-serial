@@ -12,7 +12,13 @@ module having Ethernet interface.
 See https://docs.espressif.com/projects/esp-idf/en/latest/get-started/index.html
 
 ## Building
-
+```
+git clone git@github.com:olegv142/esp32-eth-serial.git
+cd esp32-eth-serial/src
+idf.py set-target esp32
+idf.py menuconfig
+idf.py build
+```
 
 ## Configuring
 
