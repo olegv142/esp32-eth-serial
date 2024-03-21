@@ -226,7 +226,7 @@ static esp_err_t bridge_uart_init(void)
         .parity    = UART_PARITY_DISABLE,
         .stop_bits = UART_STOP_BITS_1,
         .flow_ctrl = UART_FLOWCTRL,
-        .rx_flow_ctrl_thresh = UART_HW_FIFO_LEN(UART_NUM_1) - 4
+        .rx_flow_ctrl_thresh = UART_HW_FIFO_LEN(UART_NUM_1) - 16
     };
 
     ESP_RETURN_ON_ERROR(uart_param_config(UART_NUM_1, &uart_config), TAG, "uart_param_config failed");
