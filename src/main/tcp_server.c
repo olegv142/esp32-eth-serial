@@ -17,6 +17,7 @@
 #include "nvs_flash.h"
 #include "esp_netif.h"
 #include "esp_check.h"
+#include "driver/gpio.h"
 #include "driver/uart.h"
 
 #include "lwip/err.h"
@@ -72,6 +73,7 @@ static int do_bridge(int sock)
 {
     static char rx_buffer[4096], tx_buff[4096];
     ESP_RETURN_ON_ERROR(fcntl(sock, F_SETFL, fcntl(sock, F_GETFL, 0) | O_NONBLOCK), TAG, "Failed to set O_NONBLOCK on socket");
+    gpio_set_level(CONFIG_BRIDGE_LED_GPIO, 1);
     for (;;) {
         bool idle = true;
         // Read UART
@@ -120,6 +122,7 @@ static int do_bridge(int sock)
         if (left <= 0)
             break;
     }
+    gpio_set_level(CONFIG_BRIDGE_LED_GPIO, 0);
     return 0;
 }
 
@@ -229,6 +232,9 @@ static esp_err_t bridge_uart_init(void)
     ESP_RETURN_ON_ERROR(uart_param_config(UART_NUM_1, &uart_config), TAG, "uart_param_config failed");
     ESP_RETURN_ON_ERROR(uart_set_pin(UART_NUM_1, UART_TX_GPIO, UART_RX_GPIO, UART_RTS_GPIO, UART_CTS_GPIO), TAG, "uart_set_pin failed");
     ESP_RETURN_ON_ERROR(uart_driver_install(UART_NUM_1, UART_RX_BUF_SZ, UART_TX_BUF_SZ, 0, NULL, 0), TAG, "uart_driver_install failed");
+
+    gpio_set_level(CONFIG_BRIDGE_LED_GPIO, 0);
+    gpio_set_direction(CONFIG_BRIDGE_LED_GPIO, GPIO_MODE_OUTPUT);
 
     return ESP_OK;
 }

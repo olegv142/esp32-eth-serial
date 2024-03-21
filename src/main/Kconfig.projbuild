@@ -78,6 +78,13 @@ menu "Eth-UART Bridge Configuration"
         help
             Enable using CTS input. Low level on this pin enables data transmission to TX line.
 
+    config BRIDGE_LED_GPIO
+        int "Bridge connected LED GPIO number"
+        range 0 34
+        default 2
+        help
+            GPIO number (IOxx) of the bridge connected indicator. Active level (connection established) is high.
+
     config UART_BITRATE
         int "UART baud rate"
         range 9600 1843200
