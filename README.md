@@ -22,7 +22,7 @@ idf.py build
 
 ## Configuring
 
-The bridge has connection indicator output, serial data RX/TX lines and flow control lines RTS/CTS, the last one is optional and is not enebled by default. All pin locations can be configured by running *idf.py menuconfig*. Besides one can configure UART baud rate, buffer size and whether to use CTS flow control line. The supported serial baud rates are in the range from 9600 to 1843200 with 921600 being the default.
+The bridge has connection indicator output, serial data RX/TX lines and flow control lines RTS/CTS, the last one is optional and is not enabled by default. All pin locations can be configured by running *idf.py menuconfig*. Besides one can configure UART baud rate, buffer size and whether to use CTS flow control line. The supported serial baud rates are in the range from 9600 to 1843200 with 921600 being the default.
 
 ## Flashing
 
