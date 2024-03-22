@@ -32,19 +32,23 @@
 
 static const char *TAG = "bridge_eth";
 
-typedef int (*sock_handler_t)(int);
+struct server_port;
+typedef int (*sock_handler_t)(int, struct server_port*);
+
+#define BUFF_SZ 4096
 
 struct server_port {
-    uint16_t port;
+    uint16_t       port;
     sock_handler_t handler;
+    uart_port_t    uart;
+    char           buff[BUFF_SZ];
 };
 
-static int do_echo(int sock)
+static int do_echo(int sock, struct server_port* srv)
 {
-    static char rx_buffer[4096];
     for (;;)
     {
-        int len = recv(sock, rx_buffer, sizeof(rx_buffer), 0);
+        int len = recv(sock, srv->buff, BUFF_SZ, 0);
         if (len < 0) {
             ESP_LOGE(TAG, "Error occurred during receiving: errno %d", errno);
             return -1;
@@ -54,7 +58,7 @@ static int do_echo(int sock)
         } else {
             // send() can return less bytes than supplied length.
             // Walk-around for robust implementation.
-            char* ptr = rx_buffer;
+            char* ptr = srv->buff;
             while (len) {
                 int const written = send(sock, ptr, len, 0);
                 if (written < 0) {
@@ -69,16 +73,15 @@ static int do_echo(int sock)
     }
 }
 
-static int do_bridge(int sock)
+static int do_bridge(int sock, struct server_port* srv)
 {
-    static char rx_buffer[4096], tx_buff[4096];
     ESP_RETURN_ON_ERROR(fcntl(sock, F_SETFL, fcntl(sock, F_GETFL, 0) | O_NONBLOCK), TAG, "Failed to set O_NONBLOCK on socket");
     gpio_set_level(CONFIG_BRIDGE_LED_GPIO, 1);
     for (;;) {
         bool idle = true;
         // Read UART
         for (;;) {
-            int size = uart_read_bytes(UART_NUM_1, tx_buff, sizeof(tx_buff), idle ? 0 : 1);
+            int size = uart_read_bytes(srv->uart, srv->buff, BUFF_SZ, idle ? 0 : 1);
             if (size < 0) {
                 ESP_LOGE(TAG, "Uart read failed");
                 return -1;
@@ -87,7 +90,7 @@ static int do_bridge(int sock)
                 break;
 
             ESP_LOGI(TAG, "UART -> Eth  %d bytes", size);
-            char* ptr = tx_buff;
+            char* ptr = srv->buff;
             while (size > 0) {
                 int const written = send(sock, ptr, size, 0);
                 if (written < 0) {
@@ -100,7 +103,7 @@ static int do_bridge(int sock)
             idle = false;
         }
         // Read Eth
-        int const rx_len = recv(sock, rx_buffer, sizeof(rx_buffer), 0);
+        int const rx_len = recv(sock, srv->buff, BUFF_SZ, 0);
         if (rx_len < 0) {
             if (errno != EWOULDBLOCK) {
                 ESP_LOGE(TAG, "Error occurred during receiving: errno %d", errno);
@@ -111,14 +114,14 @@ static int do_bridge(int sock)
             break;
         } else {
             ESP_LOGI(TAG, "Eth  -> UART %d bytes", rx_len);
-            uart_write_bytes(UART_NUM_1, rx_buffer, rx_len);
+            uart_write_bytes(srv->uart, srv->buff, rx_len);
             idle = false;
         }
         if (idle)
             vTaskDelay(1);
     }
     for (;;) {
-        int const left = uart_read_bytes(UART_NUM_1, tx_buff, sizeof(tx_buff), 8);
+        int const left = uart_read_bytes(srv->uart, srv->buff, BUFF_SZ, 8);
         if (left <= 0)
             break;
     }
@@ -129,7 +132,7 @@ static int do_bridge(int sock)
 static void tcp_server_task(void *pvParameters)
 {
     char addr_str[128];
-    struct server_port const* srv = pvParameters;
+    struct server_port* srv = pvParameters;
     int ip_protocol = 0;
     int keepAlive = 1;
     int keepIdle = KEEPALIVE_IDLE;
@@ -190,7 +193,7 @@ static void tcp_server_task(void *pvParameters)
         }
         ESP_LOGI(TAG, "Socket accepted ip address: %s", addr_str);
 
-        (srv->handler)(sock);
+        (srv->handler)(sock, srv);
 
         shutdown(sock, 0);
         close(sock);
@@ -239,8 +242,8 @@ static esp_err_t bridge_uart_init(void)
     return ESP_OK;
 }
 
-static struct server_port echo_server   = {CONFIG_ECHO_PORT,   do_echo};
-static struct server_port bridge_server = {CONFIG_BRIDGE_PORT, do_bridge};
+static struct server_port echo_server   = {.port = CONFIG_ECHO_PORT,   .handler = do_echo};
+static struct server_port bridge_server = {.port = CONFIG_BRIDGE_PORT, .handler = do_bridge, .uart = UART_NUM_1};
 
 void tcp_server_create(void)
 {
