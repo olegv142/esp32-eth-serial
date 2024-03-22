@@ -33,7 +33,7 @@
 static const char *TAG = "bridge_eth";
 
 struct server_port;
-typedef int (*sock_handler_t)(int, struct server_port*);
+typedef void (*sock_handler_t)(int, struct server_port*);
 
 #define BUFF_SZ 4096
 
@@ -44,17 +44,17 @@ struct server_port {
     char           buff[BUFF_SZ];
 };
 
-static int do_echo(int sock, struct server_port* srv)
+static void do_echo(int sock, struct server_port* srv)
 {
     for (;;)
     {
         int len = recv(sock, srv->buff, BUFF_SZ, 0);
         if (len < 0) {
             ESP_LOGE(TAG, "Error occurred during receiving: errno %d", errno);
-            return -1;
+            return;
         } else if (len == 0) {
             ESP_LOGW(TAG, "Connection closed");
-            return 0;
+            return;
         } else {
             // send() can return less bytes than supplied length.
             // Walk-around for robust implementation.
@@ -64,7 +64,7 @@ static int do_echo(int sock, struct server_port* srv)
                 if (written < 0) {
                     ESP_LOGE(TAG, "Error occurred during sending: errno %d", errno);
                     // Failed to retransmit, giving up
-                    return -1;
+                    return;
                 }
                 len -= written;
                 ptr += written;
@@ -73,9 +73,9 @@ static int do_echo(int sock, struct server_port* srv)
     }
 }
 
-static int do_bridge(int sock, struct server_port* srv)
+static void do_bridge(int sock, struct server_port* srv)
 {
-    ESP_RETURN_ON_ERROR(fcntl(sock, F_SETFL, fcntl(sock, F_GETFL, 0) | O_NONBLOCK), TAG, "Failed to set O_NONBLOCK on socket");
+    ESP_ERROR_CHECK(fcntl(sock, F_SETFL, fcntl(sock, F_GETFL, 0) | O_NONBLOCK));
     gpio_set_level(CONFIG_BRIDGE_LED_GPIO, 1);
     for (;;) {
         bool idle = true;
@@ -84,7 +84,7 @@ static int do_bridge(int sock, struct server_port* srv)
             int size = uart_read_bytes(srv->uart, srv->buff, BUFF_SZ, idle ? 0 : 1);
             if (size < 0) {
                 ESP_LOGE(TAG, "Uart read failed");
-                return -1;
+                return;
             }
             if (!size)
                 break;
@@ -126,7 +126,6 @@ static int do_bridge(int sock, struct server_port* srv)
             break;
     }
     gpio_set_level(CONFIG_BRIDGE_LED_GPIO, 0);
-    return 0;
 }
 
 static void tcp_server_task(void *pvParameters)
@@ -247,8 +246,7 @@ static struct server_port bridge_server = {.port = CONFIG_BRIDGE_PORT, .handler 
 
 void tcp_server_create(void)
 {
-    if (ESP_OK != bridge_uart_init())
-        return;
+    ESP_ERROR_CHECK(bridge_uart_init());
     xTaskCreate(tcp_server_task, "echo_server",   4096, (void*)&echo_server,   5, NULL);
     xTaskCreate(tcp_server_task, "bridge_server", 4096, (void*)&bridge_server, 5, NULL);
 }
