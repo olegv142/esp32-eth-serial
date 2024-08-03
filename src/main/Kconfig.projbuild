@@ -60,7 +60,7 @@ menu "Eth-UART Bridge Configuration"
     config UART_RTS_GPIO
         int "UART RTS GPIO number"
         range 0 34
-        default 12
+        default 15
         help
             GPIO number (IOxx) for serial data RTS output. Low level enables data reception from RX line.
 
